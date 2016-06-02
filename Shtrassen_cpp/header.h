@@ -1,10 +1,11 @@
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <ctime>
 
 using namespace std;
 
-typedef __int64 shType;
+typedef float shType;
 
 /* Чтение матрицы из потока */
 void readMatrix(istream& inMatrix, unsigned int N, shType** matrix);

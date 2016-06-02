@@ -27,47 +27,6 @@ namespace shNS {
 		unsigned int iR = yR;
 		unsigned int iA = yA;
 		unsigned int iB = yB;
-		__m128 dA, dB, PackedData;
-		shType *pA, *pB, *pR;
-		float *pVR = new float[4];
-		for (unsigned int i = 0; i < N; i++)
-		{
-			pA = A[iA] + xA;
-			pB = B[iB] + xB;
-			pR = result[iR] + xR;
-			for (unsigned int j = 0; j < N; j += 4)
-			{
-				//обнуление
-				PackedData = _mm_setzero_ps();
-				//загрузка данных
-				dA = _mm_set_ps(static_cast<float>(pA[0]), static_cast<float>(pA[1]), static_cast<float>(pA[2]), static_cast<float>(pA[3]));
-				dB = _mm_set_ps(static_cast<float>(pB[0]), static_cast<float>(pB[1]), static_cast<float>(pB[2]), static_cast<float>(pB[3]));
-				//сложение 4 пар целых чисел
-				PackedData = _mm_add_ps(dA, dB);
-				//записываем результат
-				_mm_storeu_ps(pVR, PackedData);
-				//увеличиваем счётчик сложений
-				algCounter(4);
-
-				pR[0] = pVR[0];
-				pR[1] = pVR[1];
-				pR[2] = pVR[2];
-				pR[3] = pVR[3];
-
-				pA += 4;
-				pB += 4;
-				pR += 4;
-			}
-			iR++;
-			iA++;
-			iB++;
-		}
-	}
-	void _additionMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
-	{
-		unsigned int iR = yR;
-		unsigned int iA = yA;
-		unsigned int iB = yB;
 		for (unsigned int i = 0; i < N; i++)
 		{
 			//cout << "\n\n==== " << i;
@@ -84,37 +43,37 @@ namespace shNS {
 			iB++;
 		}
 	}
-	/*void __additionMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
+	void _additionMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
 	{
-	unsigned int iR = yR;
-	unsigned int iA = yA;
-	unsigned int iB = yB;
-	__m128 dA, dB, PackedData;
-	shType *pA, *pB, *pR;
-	for (unsigned int i = 0; i < N; i++)
-	{
-	pA = A[iA] + xA;
-	pB = B[iB] + xB;
-	pR = result[iR] + xR;
-	for (unsigned int j = 0; j < N; j+=4)
-	{
-	//обнуление
-	PackedData = _mm_setzero_ps();
-	//загрузка данных
-	dA = _mm_loadu_ps(pA + j);
-	dB = _mm_loadu_ps(pB + j);
-	//сложение 4 пар целых чисел
-	PackedData = _mm_add_ps(dA, dB);
-	//записываем результат
-	_mm_storeu_ps(pR + j, PackedData);
-	//увеличиваем счётчик сложений
-	algCounter(4);
+		unsigned int iR = yR;
+		unsigned int iA = yA;
+		unsigned int iB = yB;
+		__m128 dA, dB, PackedData;
+		shType *pA, *pB, *pR;
+		for (unsigned int i = 0; i < N; i++)
+		{
+			pA = A[iA] + xA;
+			pB = B[iB] + xB;
+			pR = result[iR] + xR;
+			for (unsigned int j = 0; j < N; j += 4)
+			{
+				//обнуление
+				PackedData = _mm_setzero_ps();
+				//загрузка данных
+				dA = _mm_loadu_ps(pA + j);
+				dB = _mm_loadu_ps(pB + j);
+				//сложение 4 пар целых чисел
+				PackedData = _mm_add_ps(dA, dB);
+				//записываем результат
+				_mm_storeu_ps(pR + j, PackedData);
+				//увеличиваем счётчик сложений
+				algCounter(4);
+			}
+			iR++;
+			iA++;
+			iB++;
+		}
 	}
-	iR++;
-	iA++;
-	iB++;
-	}
-	}*/
 
 	/*	Разность двух матриц
 
@@ -134,49 +93,6 @@ namespace shNS {
 		unsigned int iR = yR;
 		unsigned int iA = yA;
 		unsigned int iB = yB;
-		__m128 dA, dB, PackedData;
-		shType *pA, *pB, *pR;
-		float *pVR = new float[4];
-		for (unsigned int i = 0; i < N; i++)
-		{
-			pA = A[iA] + xA;
-			pB = B[iB] + xB;
-			pR = result[iR] + xR;
-			for (unsigned int j = 0; j < N; j += 4)
-			{
-				//обнуление
-				PackedData = _mm_setzero_ps();
-				//загрузка данных
-				dA = _mm_set_ps(static_cast<float>(pA[0]), static_cast<float>(pA[1]), static_cast<float>(pA[2]), static_cast<float>(pA[3]));
-				dB = _mm_set_ps(static_cast<float>(pB[0]), static_cast<float>(pB[1]), static_cast<float>(pB[2]), static_cast<float>(pB[3]));
-				//вычитание 4 пар целых чисел
-				PackedData = _mm_sub_ps(dA, dB);
-				//записываем результат
-				_mm_storeu_ps(pVR, PackedData);
-				//увеличиваем счётчик вычетаний
-				algCounter(4);
-
-				//result[iR][yR + j] = A[iA][xA + j] - B[iB][xB + j];
-
-				pR[0] = pVR[0];
-				pR[1] = pVR[1];
-				pR[2] = pVR[2];
-				pR[3] = pVR[3];
-
-				pA += 4;
-				pB += 4;
-				pR += 4;
-			}
-			iR++;
-			iA++;
-			iB++;
-		}
-	}
-	void _subtractionMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
-	{
-		unsigned int iR = yR;
-		unsigned int iA = yA;
-		unsigned int iB = yB;
 		for (unsigned int i = 0; i < N; i++)
 		{
 
@@ -190,39 +106,39 @@ namespace shNS {
 			iB++;
 		}
 	}
-	/*void __subtractionMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
+	void _subtractionMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
 	{
-	unsigned int iR = yR;
-	unsigned int iA = yA;
-	unsigned int iB = yB;
-	__m128 dA, dB, PackedData;
-	shType *pA, *pB, *pR;
-	for (unsigned int i = 0; i < N; i++)
-	{
-	pA = A[iA] + xA;
-	pB = B[iB] + xB;
-	pR = result[iR] + xR;
-	for (unsigned int j = 0; j < N; j += 4)
-	{
-	//обнуление
-	PackedData = _mm_setzero_ps();
-	//загрузка данных
-	dA = _mm_loadu_ps(pA + j);
-	dB = _mm_loadu_ps(pB + j);
-	//вычитание 4 пар целых чисел
-	PackedData = _mm_sub_ps(dA, dB);
-	//записываем результат
-	_mm_storeu_ps(pR + j, PackedData);
-	//увеличиваем счётчик вычетаний
-	algCounter(4);
+		unsigned int iR = yR;
+		unsigned int iA = yA;
+		unsigned int iB = yB;
+		__m128 dA, dB, PackedData;
+		shType *pA, *pB, *pR;
+		for (unsigned int i = 0; i < N; i++)
+		{
+			pA = A[iA] + xA;
+			pB = B[iB] + xB;
+			pR = result[iR] + xR;
+			for (unsigned int j = 0; j < N; j += 4)
+			{
+				//обнуление
+				PackedData = _mm_setzero_ps();
+				//загрузка данных
+				dA = _mm_loadu_ps(pA + j);
+				dB = _mm_loadu_ps(pB + j);
+				//вычитание 4 пар целых чисел
+				PackedData = _mm_sub_ps(dA, dB);
+				//записываем результат
+				_mm_storeu_ps(pR + j, PackedData);
+				//увеличиваем счётчик вычетаний
+				algCounter(4);
 
-	//result[iR][yR + j] = A[iA][xA + j] - B[iB][xB + j];
+				//result[iR][yR + j] = A[iA][xA + j] - B[iB][xB + j];
+			}
+			iR++;
+			iA++;
+			iB++;
+		}
 	}
-	iR++;
-	iA++;
-	iB++;
-	}
-	}*/
 
 	/*	Произведение двух матриц
 
@@ -238,50 +154,6 @@ namespace shNS {
 	int yR			- Начальное положение по стобцам у матрицы result(верхнее);
 	*/
 	void calculateMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
-	{
-		unsigned int iR = yR;
-		unsigned int iA = yA;
-		__m128 dA, dB, PackedData;
-		shType *pA;
-		float *pVR;
-		float sum;
-		unsigned int lyB;
-		pVR = new float[4];
-		for (unsigned int i = 0; i < N; i++)
-		{
-			for (unsigned int l = 0; l< N; l++)
-			{
-				sum = 0;
-				lyB = l + yB;
-				pA = A[iA] + xA;
-				for (unsigned int j = 0; j< N; j += 4)
-				{
-					//обнуление
-					PackedData = _mm_setzero_ps();
-					//загрузка данных
-					dA = _mm_set_ps(static_cast<float>(pA[0]), static_cast<float>(pA[1]), static_cast<float>(pA[2]), static_cast<float>(pA[3]));
-					dB = _mm_set_ps(static_cast<float>(B[j + xB][lyB]), static_cast<float>(B[j + 1 + xB][lyB]), static_cast<float>(B[j + 2 + xB][lyB]), static_cast<float>(B[j + 3 + xB][lyB]));
-					//умножение 4 пар целых чисел
-					PackedData = _mm_mul_ps(dA, dB);
-					//записываем результат
-					_mm_storeu_ps(pVR, PackedData);
-					//добавляем сумму умножений
-					sum += pVR[0] + pVR[1] + pVR[2] + pVR[3];
-					//увеличиваем счётчик умножений и сложений
-					algCounter(4, 0, 4);
-
-					pA += 4;
-
-					//temp += A[iA][j + xA] * B[j + xB][l + yB];
-				}
-
-				result[iR][l + xR] = static_cast<shType>(sum);
-			}
-			iR++;
-			iA++;
-		}
-	}
-	void _calculateMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
 	{
 		unsigned int iR = yR;
 		unsigned int iA = yA;
@@ -302,41 +174,38 @@ namespace shNS {
 			iA++;
 		}
 	}
-	void __calculateMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
+	void _calculateMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
 	{
 		unsigned int iR = yR;
 		unsigned int iA = yA;
-		__m128i dA, dB, PackedData;
+		__m128 dA, dB, PackedData;
 		shType *pA, *pB, *pVR;
 		shType sum;
 		unsigned int lyB;
-		pB = new shType[2];
-		pVR = new shType[2];
+		pVR = new shType[4];
 		for (unsigned int i = 0; i < N; i++)
 		{
-			for (unsigned int l = 0; l< N; l++)
+			for (unsigned int l = 0; l < N; l++)
 			{
 				sum = 0;
 				lyB = l + yB;
 				pA = A[iA] + xA;
-				for (unsigned int j = 0; j< N; j += 2)
+				for (unsigned int j = 0; j < N; j += 4)
 				{
 					//обнуление
-					PackedData = _mm_setzero_si128();
+					PackedData = _mm_setzero_ps();
 					//загрузка данных
-					dA = _mm_load_si128((__m128i*)(pA + j));
+					dA = _mm_loadu_ps(pA + j);
 					//dB = _mm_loadu_ps(pB);
-					pB[0] = B[j + xB][lyB];
-					pB[1] = B[j + 1 + xB][lyB];
-					dB = _mm_load_si128((__m128i*)(pB));
+					dB = _mm_set_ps(B[j + xB][lyB], B[j + 1 + xB][lyB], B[j + 2 + xB][lyB], B[j + 3 + xB][lyB]);
 					//умножение 4 пар целых чисел
-					PackedData = _mm_add_epi64(dA, dB);
+					PackedData = _mm_mul_ps(dA, dB);
 					//записываем результат
-					_mm_store_si128((__m128i*)(pVR), PackedData);
+					_mm_storeu_ps(pVR, PackedData);
 					//добавляем сумму умножений
-					sum += pVR[0] + pVR[1];
+					sum += pVR[0] + pVR[1] + pVR[2] + pVR[3];
 					//увеличиваем счётчик умножений и сложений
-					algCounter(2, 0, 2);
+					algCounter(4, 0, 4);
 
 					//temp += A[iA][j + xA] * B[j + xB][l + yB];
 				}
@@ -347,48 +216,6 @@ namespace shNS {
 			iA++;
 		}
 	}
-	/*void __calculateMatrix(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0)
-	{
-	unsigned int iR = yR;
-	unsigned int iA = yA;
-	__m128 dA, dB, PackedData;
-	shType *pA, *pB, *pVR;
-	shType sum;
-	unsigned int lyB;
-	pVR	= new shType[4];
-	for (unsigned int i = 0; i < N; i++)
-	{
-	for (unsigned int l = 0; l< N; l++)
-	{
-	sum = 0;
-	lyB = l + yB;
-	pA = A[iA] + xA;
-	for (unsigned int j = 0; j< N; j+=4)
-	{
-	//обнуление
-	PackedData = _mm_setzero_ps();
-	//загрузка данных
-	dA = _mm_loadu_ps(pA + j);
-	//dB = _mm_loadu_ps(pB);
-	dB = _mm_set_ps(B[j + xB][lyB], B[j + 1 + xB][lyB], B[j + 2 + xB][lyB], B[j + 3 + xB][lyB]);
-	//умножение 4 пар целых чисел
-	PackedData = _mm_mul_ps(dA, dB);
-	//записываем результат
-	_mm_storeu_ps(pVR, PackedData);
-	//добавляем сумму умножений
-	sum += pVR[0] + pVR[1] + pVR[2] + pVR[3];
-	//увеличиваем счётчик умножений и сложений
-	algCounter(4, 0, 4);
-
-	//temp += A[iA][j + xA] * B[j + xB][l + yB];
-	}
-
-	result[iR][l + xR] = sum;
-	}
-	iR++;
-	iA++;
-	}
-	}*/
 }
 
 void shtrassen(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA, unsigned int yA, unsigned int xB, unsigned int yB, unsigned int xR, unsigned int yR)
