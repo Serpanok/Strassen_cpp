@@ -7,24 +7,23 @@ using namespace std;
 
 typedef float shType;
 
-/* Чтение матрицы из потока */
-void readMatrix(istream& inMatrix, unsigned int N, shType** matrix);
+/* Reading matrix from stream */
+void readMatrix(istream& inMatrix, unsigned const int N, shType** matrix);
 
-/* Запись матрицы в поток */
-void writeMatrix(ostream& out, unsigned int N, shType** matrix, unsigned int xR = 0, unsigned int yR = 0);
+/* Record matrix to stream */
+void writeMatrix(ostream& out, unsigned const int N, shType** matrix, unsigned const int xR = 0, unsigned const int yR = 0);
 
-/* Генерация матрицы в поток */
-void genMatrix(ostream& out, unsigned int N, int min = 0, int max = 1000, time_t* sranGen = nullptr);
+/* Generation matrix to stream */
+void genMatrix(ostream& out, unsigned const int N, const int min = 0, const int max = 1000, time_t* sranGen = nullptr);
 
-/*	Алгоритм Штрассена для умножения матриц
+/*	Strassen algorithm for matrix multiplication
 
-int N			- Размерность матрицы;
-int** A			- Марица A с уже выделенной динамической памятью new int[N][N];
-int** B			- Марица B с уже выделенной динамической памятью new int[N][N];
-int** result	- Марица result с уже выделенной динамической памятью new int[N][N];
-int x			- Начальное положение по стобцам(верхнее);
-int y			- Начальное положение по строкам(верхнее);
+	int N			- dimension of the matrix;
+	int ** A		- matrix A with pre-allocated dynamiс memory;
+	int ** B		- matrix B with pre-allocated dynamiс memory;
+	int ** result	- matrix result with pre-allocated dynamiс memory;
+	bool useSimd	- is need to use SIMD;
 */
-void shtrassen(unsigned int N, shType** A, shType** B, shType** result, unsigned int xA = 0, unsigned int yA = 0, unsigned int xB = 0, unsigned int yB = 0, unsigned int xR = 0, unsigned int yR = 0);
+void shtrassen(unsigned const int N, shType** A, shType** B, shType** result, bool const useSIMD = true, unsigned const int xA = 0, unsigned const int yA = 0, unsigned const int xB = 0, unsigned const int yB = 0, unsigned const int xR = 0, unsigned const int yR = 0);
 
-void algCounter(unsigned __int8 addition = 0, unsigned __int8 subtraction = 0, unsigned __int8 multiplication = 0);
+void algCounter(unsigned const __int8 addition = 0, unsigned const __int8 subtraction = 0, unsigned const __int8 multiplication = 0);

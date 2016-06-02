@@ -1,7 +1,7 @@
 #include "header.h"
 #include <cstdlib>
 
-void genMatrix(ostream& out, unsigned int N, int min, int max, time_t* sranGen)
+void genMatrix(ostream& out, unsigned const int N, const int min, const int max, time_t* sranGen)
 {
 	srand(time(sranGen));
 

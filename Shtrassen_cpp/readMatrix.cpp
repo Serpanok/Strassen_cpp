@@ -1,6 +1,6 @@
 #include "header.h"
 
-void readMatrix(istream& inMatrix, unsigned int N, shType** matrix)
+void readMatrix(istream& inMatrix, unsigned const int N, shType** matrix)
 {
 	for (int i = 0; i < N; i++)
 	{

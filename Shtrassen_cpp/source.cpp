@@ -60,7 +60,9 @@ int main(int argc, char *argv[])
 							<< " -generate, -g\t\tgenerate data to opened file\n"
 							<< " -readIn, -rI\t\tread data from opened file\n"
 							<< " -writeOut, -wO\t\twrite result to file\n"
-							<< " -shtrassen, -s\t\trun shtrassen algorithm\n";
+							<< " -shtrassen, -s\t\trun shtrassen algorithm\n"
+							<< "\nFor debugging:\n"
+							<< " -test, -t\t\trun test\n";
 			}
 			else if (command == "-openIn" || command == "-oI")
 			{
@@ -206,6 +208,10 @@ int main(int argc, char *argv[])
 					continue;
 				}
 
+				std::cout << "Use SIMD? (y/n)\n";
+				std::cin >> answer;
+				bool useSIMD = (answer == 'y');
+
 				result = new shType*[N];
 				for (int i = 0; i < N; i++)
 				{
@@ -213,7 +219,7 @@ int main(int argc, char *argv[])
 				}
 
 				start_time = clock(); //set timer
-				shtrassen(N, A, B, result);
+				shtrassen(N, A, B, result, useSIMD);
 
 				std::cout	<< "\nResult:\n"
 							<< " multiplicationÑ: " << algCounters::multiplicationÑ_ << "\n"
@@ -230,11 +236,84 @@ int main(int argc, char *argv[])
 					alreadyHaveCommand = true;
 				}
 			}
+			else if (command == "-test" || command == "-t")
+			{
+				char testN[5];
+
+				std::cout << "Enter test number: ";
+				std::cin >> testN;
+
+				std::cout << "Use SIMD? (y/n)\n";
+				std::cin >> answer;
+				bool useSIMD = (answer == 'y');
+
+				string inputFile = "input_test";
+				inputFile += testN;
+				inputFile += ".txt";
+				in.open(inputFile);
+				string outFile = "output_test";
+				outFile += testN;
+				if (useSIMD)
+				{
+					outFile += "_SIMD";
+				}
+				outFile += ".txt";
+				out.open(outFile);
+
+				std::cout << "Files opened successfully!\n";
+
+				/* reading */
+
+				start_time = clock(); //set timer
+
+				in >> N;
+
+				A = new shType*[N];
+				B = new shType*[N];
+				result = new shType*[N];
+				for (int i = 0; i < N; i++)
+				{
+					A[i] = new shType[N];
+					B[i] = new shType[N];
+					result[i] = new shType[N];
+				}
+
+				readMatrix(in, N, A);
+				readMatrix(in, N, B);
+
+				in.close();
+
+				std::cout << "Read successfully in " << (clock() - start_time) << "ms!\n";
+
+				/* shtrassen */
+
+				start_time = clock(); //set timer
+
+				shtrassen(N, A, B, result, useSIMD);
+
+				std::cout << "\nResult:\n"
+					<< " multiplicationÑ: " << algCounters::multiplicationÑ_ << "\n"
+					<< " additionÑ: " << algCounters::additionÑ_ << "\n"
+					<< " subtractionÑ: " << algCounters::subtractionÑ_ << "\n"
+					<< " time: " << (clock() - start_time) << "ms\n\n";
+
+				/* writing */
+
+				start_time = clock(); //set timer
+
+				writeMatrix(out, N, result);
+
+				out.close();
+
+				std::cout << "Write successfully in " << (clock() - start_time) << "ms!\n";
+
+			}
 			else
 			{
 				std::cout << "Wrong command! Use help(-h)\n";
 			}
 		}
+
 		return 1;
 	}
 	catch (...)
