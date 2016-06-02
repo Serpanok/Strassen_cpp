@@ -146,6 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="genMatrix.cpp" />
+    <ClCompile Include="readMatrix.cpp" />
+    <ClCompile Include="shtrassen.cpp" />
+    <ClCompile Include="source.cpp" />
+    <ClCompile Include="writeMatrix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
